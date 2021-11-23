@@ -1,3 +1,7 @@
+# editor
+
+export EDITOR="vim"
+
 # directories
 
 function dir_general() {
