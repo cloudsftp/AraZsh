@@ -11,6 +11,9 @@ DIR_CFG="dir.cfg"
 DIR_COMMANDS_GEN="${SCRIPT_DIR}/dir-commands-generator.py"
 CONDA_INSTALL_DIR="${HOME}/anaconda3"
 
+COMPLETE_DIR="Complete"
+OH_MY_ZSH_COMPLETE_DIR="${HOME}/.oh-my-zsh/completions"
+
 sudo apt install -y zsh
 
 # Install oh my zsh
@@ -31,8 +34,11 @@ echo "source $(pwd)/${COMMAND_SCRIPT}" > "${MAIN_SCRIPT}"
 # Create dir-commands.zsh
 
 if [[ -f "${DIR_CFG}" ]]; then
-  python "${DIR_COMMANDS_GEN}" "${DIR_CFG}" "${DIR_SCRIPT}"
+  mkdir -p "${COMPLETE_DIR}" "${OH_MY_ZSH_COMPLETE_DIR}"
+  python "${DIR_COMMANDS_GEN}" "${DIR_CFG}" "${DIR_SCRIPT}" "${COMPLETE_DIR}"
   echo "source $(pwd)/${DIR_SCRIPT}" >> "${MAIN_SCRIPT}"
+  sudo cp "${COMPLETE_DIR}"/* "${OH_MY_ZSH_COMPLETE_DIR}"
+  rm "${HOME}"/.zcompdump*
 else
   echo "${DIR_CFG} missing. Skipping Generation of ${DIR_SCRIPT}"
 fi
