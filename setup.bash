@@ -14,13 +14,17 @@ CONDA_INSTALL_DIR="${HOME}/anaconda3"
 COMPLETE_DIR="Complete"
 OH_MY_ZSH_COMPLETE_DIR="${HOME}/.oh-my-zsh/completions"
 
-sudo apt install -y zsh
+case "$(uname -s)" in
+	Linux*)		sudo apt install -y zsh
+			SUDO=sudo;;
+	CYGWIN*)	apt-cyg install zsh;;
+esac
 
 # Install oh my zsh
 
 OH_MY_ZSH_INSTALL_SCRIPT="install-oh-my-zsh.sh"
 wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O "${OH_MY_ZSH_INSTALL_SCRIPT}"
-sudo chmod +x ${OH_MY_ZSH_INSTALL_SCRIPT}
+${SUDO} chmod +x ${OH_MY_ZSH_INSTALL_SCRIPT}
 ./${OH_MY_ZSH_INSTALL_SCRIPT} --unattended
 
 # Copy dotfile
@@ -37,8 +41,8 @@ if [[ -f "${DIR_CFG}" ]]; then
   mkdir -p "${COMPLETE_DIR}" "${OH_MY_ZSH_COMPLETE_DIR}"
   python "${DIR_COMMANDS_GEN}" "${DIR_CFG}" "${DIR_SCRIPT}" "${COMPLETE_DIR}"
   echo "source $(pwd)/${DIR_SCRIPT}" >> "${MAIN_SCRIPT}"
-  sudo cp "${COMPLETE_DIR}"/* "${OH_MY_ZSH_COMPLETE_DIR}"
-  rm "${HOME}"/.zcompdump*
+  ${SUDO} cp "${COMPLETE_DIR}"/* "${OH_MY_ZSH_COMPLETE_DIR}"
+  rm -f "${HOME}"/.zcompdump*
 else
   echo "${DIR_CFG} missing. Skipping Generation of ${DIR_SCRIPT}"
 fi
