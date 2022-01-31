@@ -37,11 +37,7 @@ export {command}d="{dir}"
                 autocomplete_file.write(
 f'''#compdef {command}
 
-_{command}() {{
-    compadd $(ls {dir})
-}}
-
-_{command} "$@"
+_path_files -W "{dir}" "$@"
 ''')
 
 
