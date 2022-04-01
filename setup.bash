@@ -14,11 +14,7 @@ CONDA_INSTALL_DIR="${HOME}/anaconda3"
 COMPLETE_DIR="Complete"
 OH_MY_ZSH_COMPLETE_DIR="${HOME}/.oh-my-zsh/completions"
 
-case "$(uname -s)" in
-	Linux*)		sudo apt install -y zsh
-			SUDO=sudo;;
-	CYGWIN*)	apt-cyg install zsh;;
-esac
+[[ "$(uname -s)" = Linux* ]] && SUDO="sudo"
 
 # Install oh my zsh
 
@@ -26,6 +22,13 @@ OH_MY_ZSH_INSTALL_SCRIPT="install-oh-my-zsh.sh"
 wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O "${OH_MY_ZSH_INSTALL_SCRIPT}"
 ${SUDO} chmod +x ${OH_MY_ZSH_INSTALL_SCRIPT}
 ./${OH_MY_ZSH_INSTALL_SCRIPT} --unattended
+
+# Install plugins
+
+git submodule init && git submodule update
+for plugin in $(ls Plugins); do
+  ${SUDO} cp -r "Plugins/${plugin}" "${HOME}/.oh-my-zsh/custom/plugins/${plugin}"
+done
 
 # Copy dotfile
 
