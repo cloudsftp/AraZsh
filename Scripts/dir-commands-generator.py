@@ -15,7 +15,7 @@ class ProjCommandsGenerator:
     def read_cfg(self):
         with open(self.cfg_file_name, 'r') as cfg_file:
             for line in cfg_file:
-                if len(line) > 0:
+                if not re.match(r'^$', line):
                     command, dir = re.match(r'(\S+)\s+(\S+)', line).groups()
                     self.cfg[command] = dir
 
