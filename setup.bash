@@ -42,7 +42,7 @@ echo "source $(pwd)/${COMMAND_SCRIPT}" > "${MAIN_SCRIPT}"
 
 if [[ -f "${DIR_CFG}" ]]; then
   mkdir -p "${COMPLETE_DIR}" "${OH_MY_ZSH_COMPLETE_DIR}"
-  python "${DIR_COMMANDS_GEN}" "${DIR_CFG}" "${DIR_SCRIPT}" "${COMPLETE_DIR}"
+  python3 "${DIR_COMMANDS_GEN}" "${DIR_CFG}" "${DIR_SCRIPT}" "${COMPLETE_DIR}"
   echo "source $(pwd)/${DIR_SCRIPT}" >> "${MAIN_SCRIPT}"
   ${SUDO} cp "${COMPLETE_DIR}"/* "${OH_MY_ZSH_COMPLETE_DIR}"
   rm -f "${HOME}"/.zcompdump*
