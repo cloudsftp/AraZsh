@@ -9,7 +9,6 @@ DIR_SCRIPT="${SCRIPT_DIR}/dir-commands.zsh"
 
 DIR_CFG="dir.cfg"
 DIR_COMMANDS_GEN="${SCRIPT_DIR}/dir-commands-generator.py"
-CONDA_INSTALL_DIR="${HOME}/anaconda3"
 
 COMPLETE_DIR="Complete"
 OH_MY_ZSH_COMPLETE_DIR="${HOME}/.oh-my-zsh/completions"
@@ -54,10 +53,4 @@ RC_STAMP="AraZsh"
 if [[ -z "$(grep ${RC_STAMP} ${ZSHRC})" ]]; then
   echo "# ${RC_STAMP}" >> "${ZSHRC}"
   echo "source $(pwd)/${MAIN_SCRIPT}" >> "${ZSHRC}"
-fi
-
-# Init conda
-
-if [[ -d "${CONDA_INSTALL_DIR}" ]]; then
-  "${CONDA_INSTALL_DIR}/bin/conda" init zsh
 fi
