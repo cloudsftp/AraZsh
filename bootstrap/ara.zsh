@@ -4,7 +4,7 @@ ZSH_CUSTOM="${HOME}/.ara-zsh"
 zstyle ':omz:update' mode auto
 
 HIST_STAMPS="yyyy-mm-dd"
-ZSH_THEME="juanghurtado"
+ZSH_THEME="juanghurtado+jj"
 
 plugins=(git jj kubectl zsh-autosuggestions zsh-syntax-highlighting)
 
