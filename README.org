@@ -1,0 +1,17 @@
+#+title: Ara ZSH
+
+Oh My ZSH setup and utilities
+
+* Etymology
+
+The equivalent of "Oh my" in Japanese is 「 あらあら」 ("Ara ara").
+When I started building this installer script for Oh My ZSH, I did a little pun.
+
+* Themes I liked when I started out
+
+I found this list of themes in a file called =cool-themes.list= lmao
+
+- nanotech [one line, branch right]
+- juanghurtado [two line, branch right]
+- pmcgee [two line, branch lower]
+- ys [two line, all upper]

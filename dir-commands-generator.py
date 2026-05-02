@@ -1,16 +1,15 @@
-#!/bin/python
-
 import sys
 import re
 
 class ProjCommandsGenerator:
-    def __init__(self, cfg_file_name, tgt_file_name, complete_path):
+    def __init__(self, cfg_file_name, complete_path) -> None:
         super().__init__()
 
         self.cfg = dict()
         self.cfg_file_name = cfg_file_name
-        self.tgt_file_name = tgt_file_name
         self.complete_path = complete_path
+
+        self.tgt_file_name = f"{complete_path}/dir-commands.zsh"
 
     def read_cfg(self):
         with open(self.cfg_file_name, 'r') as cfg_file:
@@ -42,11 +41,11 @@ _path_files -W "{dir}" "$@"
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 4:
-        print("3 arguments expected\n")
+    if len(sys.argv) < 3:
+        print("2 arguments expected\n")
         exit(2)
 
-    generator = ProjCommandsGenerator(sys.argv[1], sys.argv[2], sys.argv[3])
+    generator = ProjCommandsGenerator(sys.argv[1], sys.argv[2])
     generator.read_cfg()
     generator.write_tgt()
     generator.write_autocomplete()
