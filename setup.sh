@@ -87,7 +87,11 @@ else
     echo "$zshrc" does not exist. Creating...
     echo
 
-    cp zshrc-bootstrap.zsh "$zshrc"
+    cat > "$zshrc" <<EOF
+# BEGIN AraZsh
+source ${HOME}/ara.zsh
+# END AraZsh
+EOF
 fi
 
 # Link ~/.ara-zsh
