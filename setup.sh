@@ -7,10 +7,10 @@ installer_dir="$(pwd)"
 ara_dir="${HOME}/.ara-zsh"
 omz_dir="${HOME}/.oh-my-zsh"
 
+bootstrap_dir="bootstrap"
 target_dir="target"
 
 plugins_dir="$target_dir/plugins"
-themes_dir="$target_dir/themes"
 completions_dir="$target_dir/completions"
 
 stow -t "${HOME}" "$bootstrap_dir"
@@ -87,7 +87,11 @@ else
     echo "$zshrc" does not exist. Creating...
     echo
 
-    cp zshrc-bootstrap.zsh "$zshrc"
+    cat > "$zshrc" <<EOF
+# BEGIN AraZsh
+source ${HOME}/ara.zsh
+# END AraZsh
+EOF
 fi
 
 # Link ~/.ara-zsh
