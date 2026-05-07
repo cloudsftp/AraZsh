@@ -1,43 +1,43 @@
 import sys
 import re
 
+
 class ProjCommandsGenerator:
-    def __init__(self, cfg_file_name, complete_path) -> None:
+    def __init__(self, cfg_file_name, target_path) -> None:
         super().__init__()
 
         self.cfg = dict()
         self.cfg_file_name = cfg_file_name
-        self.complete_path = complete_path
+        self.target_path = target_path
 
-        self.tgt_file_name = f"{complete_path}/dir-commands.zsh"
+        self.tgt_file_name = f"{target_path}/dir-commands.zsh"
+        self.complete_path = f"{target_path}/completions"
 
     def read_cfg(self):
-        with open(self.cfg_file_name, 'r') as cfg_file:
+        with open(self.cfg_file_name, "r") as cfg_file:
             for line in cfg_file:
-                if not re.match(r'^$', line):
-                    command, dir = re.match(r'(\S+)\s+(\S+)', line).groups()
+                if not re.match(r"^$", line):
+                    command, dir = re.match(r"(\S+)\s+(\S+)", line).groups()
                     self.cfg[command] = dir
 
     def write_tgt(self):
-        with open(self.tgt_file_name, 'w') as tgt_file:
+        with open(self.tgt_file_name, "w") as tgt_file:
             for command, dir in self.cfg.items():
-                tgt_file.write(
-f'''
+                tgt_file.write(f"""
 # config for {command} (dir {dir})
 {command}() {{
     dir_general {dir} $1
 }}
 export {command}d="{dir}"
-''')
+""")
 
     def write_autocomplete(self):
         for command, dir in self.cfg.items():
-            with open(f'{self.complete_path}/_{command}', 'w') as autocomplete_file:
-                autocomplete_file.write(
-f'''#compdef {command}
+            with open(f"{self.complete_path}/_{command}", "w") as autocomplete_file:
+                autocomplete_file.write(f"""#compdef {command}
 
 _path_files -W "{dir}" "$@"
-''')
+""")
 
 
 if __name__ == "__main__":
