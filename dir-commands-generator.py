@@ -1,43 +1,66 @@
 import sys
 import re
+import textwrap
+from pathlib import Path
 
 
-class ProjCommandsGenerator:
-    def __init__(self, cfg_file_name, target_path) -> None:
-        super().__init__()
+class ProjectCommandsGenerator:
+    configuration: dict[str, str]
 
-        self.cfg = dict()
-        self.cfg_file_name = cfg_file_name
-        self.target_path = target_path
+    target_directory: Path
+    commands_file_name: Path
+    completion_directory: Path
 
-        self.tgt_file_name = f"{target_path}/dir-commands.zsh"
-        self.complete_path = f"{target_path}/completions"
-
-    def read_cfg(self):
-        with open(self.cfg_file_name, "r") as cfg_file:
+    def __init__(
+        self,
+        cfg_file_name: Path,
+        target_directory: Path,
+    ) -> None:
+        self.configuration = dict()
+        with open(cfg_file_name, "r") as cfg_file:
             for line in cfg_file:
-                if not re.match(r"^$", line):
-                    command, dir = re.match(r"(\S+)\s+(\S+)", line).groups()
-                    self.cfg[command] = dir
+                if len(line) == 0:
+                    continue
 
-    def write_tgt(self):
-        with open(self.tgt_file_name, "w") as tgt_file:
-            for command, dir in self.cfg.items():
-                tgt_file.write(f"""
-# config for {command} (dir {dir})
-{command}() {{
-    dir_general {dir} $1
-}}
-export {command}d="{dir}"
-""")
+                matches = re.match(r"(\S+)\s+(\S+)", line)
+                if not matches:
+                    continue
 
-    def write_autocomplete(self):
-        for command, dir in self.cfg.items():
-            with open(f"{self.complete_path}/_{command}", "w") as autocomplete_file:
-                autocomplete_file.write(f"""#compdef {command}
+                command, directory = matches.groups()
+                self.configuration[command] = directory
 
-_path_files -W "{dir}" "$@"
-""")
+        self.target_directory = target_directory
+
+        self.commands_file_name = target_directory.joinpath("dir-commands.zsh")
+        self.completion_directory = target_directory.joinpath("completions")
+
+    def write_commands(self) -> None:
+        self.target_directory.mkdir(exist_ok=True)
+
+        with open(self.commands_file_name, "w") as commands_file:
+            for command, dir in self.configuration.items():
+                commands_file.write(textwrap.dedent(f"""\
+                    # config for {command} (dir {dir})
+                    {command}() {{
+                        dir_general {dir} $1
+                    }}
+                    export {command}d="{dir}"
+
+                """))
+
+    def write_completions(self) -> None:
+        self.completion_directory.mkdir(exist_ok=True)
+
+        for command, directory in self.configuration.items():
+            with open(
+                self.completion_directory.joinpath(f"_{command}"),
+                "w",
+            ) as completion_file:
+                completion_file.write(textwrap.dedent(f"""\
+                    #compdef {command}
+
+                    _path_files -W "{directory}" "$@"
+                """))
 
 
 if __name__ == "__main__":
@@ -45,7 +68,10 @@ if __name__ == "__main__":
         print("2 arguments expected\n")
         exit(2)
 
-    generator = ProjCommandsGenerator(sys.argv[1], sys.argv[2])
-    generator.read_cfg()
-    generator.write_tgt()
-    generator.write_autocomplete()
+    generator = ProjectCommandsGenerator(
+        Path(sys.argv[1]),
+        Path(sys.argv[2]),
+    )
+
+    generator.write_commands()
+    generator.write_completions()
