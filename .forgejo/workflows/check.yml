@@ -1,0 +1,13 @@
+name: Check
+
+on: push
+
+jobs:
+  check-code:
+    runs-on: dagger
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Checks
+        run: dagger call check

@@ -71,7 +71,7 @@ else
     echo Generating commands
     echo
 
-    python3 dir-commands-generator.py "$dir_cfg" "$completions_dir"
+    python3 dir-commands-generator.py "$dir_cfg" "$target_dir"
 fi
 
 # Bootstrap .zshrc
